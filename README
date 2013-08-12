@@ -2,4 +2,12 @@ This is a mirror of http://www.vim.org/scripts/script.php?script_id=4681
 
 This plugin provides an :Arg command which can nicely print the output of :args.  Read more in the included doc file.
 
+The main reason for this plugin is to remove a common directory when you work on a project which files are deep under some common project directory and you use autodir vim option.  In this case :args command shows very long filenames and the arg list becomes to readable.  You can use:
+Args :p:s?^/path/to/project/directory/??
+or even
+Args :p:s?^/path/to/project/directory/??:S
+to shorten the path.  If you work on a Django project and you use args and friends this command will be very useful.
+
+If you rate this plugin, especially down rate and you have a reason for that, please send me an email mszamot [AT] gmail [DOT] com . Otherwise, why to rate at all ...?
+
 You can also get the plugin from https://github.com/coot/vim_args
