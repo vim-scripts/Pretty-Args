@@ -1,6 +1,7 @@
 *pretty_args* pretty :Args commad	Last change: 04 August 2013
 
-This pluginn provides just one command:
+This pluginn provides a bunch of commands which implements a different
+(complementary) way of |:args|, |:argu|, |:arga| and |:argd| vim commands.
     
 						    *:Args*
 :Args[!] [mods] [newline]
@@ -32,6 +33,16 @@ This pluginn provides just one command:
 	line.  [newline] can be anything except a string starting with ":"
 	like modifiers do.  This is useful with the ":p" modifier.
 
+	When you compile vim with path (patch/arg.patch) the |:Args| command
+	will now if it has to use global |Args_fnamemodifier| variable or
+	|w:Args_fnamemodifier| variable.  In this way you can use seprate
+	modifiers for local and global list.  If you don't use this patch,
+	|w:Args_fnamemodifier| variable is used whenever it is found.  In this
+	case you can use this commands (they will be defined): >
+	    :com! Argg :silent! unlet w:Args_fnamemodifier<bar>argg
+	    :com! Argl :let w:Args_fnamemodifier = g:Args_fnamemodifier<bar>argl
+<
+
 Example: if you want to remove a common path from args, which is the case if
 you work on a project which under "/home/user/project/" directory, you can use
 the following path modifier: >
@@ -42,6 +53,43 @@ the following path modifier: >
 Another tip is useful if the path is long and you do not want to type it.
 Then you can use ^r=expand('%:p:h:h...') in the command line.  Check |^r=| and
 |%:p|, |%:h|.
+
+						    *:Argu*
+:Argu [file]
+    This command acts like |:argu| but beside a number it accepts argpath
+    argument, i.e. an element as displayed by |:Args| using
+    |g:Args_fnamemodifier|.  [file] can be completed. 
+
+						    *:Arga*
+:[count]Arga[!] [name] ..
+nmap \a
+
+    This command acts like |:arga| with the only difference that you can ommit
+    the [name].  If this is the case the current buffer will be added, i.e.
+    this is equivalent to |:arga%|, but it is easier to type. There is also
+    a normal mode map for that.
+
+    The difference from |:arga| is that it will not add a file if it is
+    already present in the |arglist|.  If you use bang "!", and the [name] is
+    in the |arglist| it will be moved where [count] suggest.
+
+    Implementation detail: [count] 987654321 is the default count which makes
+    it possible to implement |:Arga| the way |:arga| works. If it happens that
+    you need 987654321 files in |arglist| ... ;)
+
+						    *:Argd*
+:Argd[!] [file]
+    Acts like *:argd*, but [file] is a file rather than file pattarn.  Without
+    bang it prepends '*' to [file], if [file] is not given the current file
+    will be removed, like '|:argd|%'.  With bang "!" it acts just like |:argd|
+    (no '*' added, no escaping of |file-pattern| special literals).  The main
+    difference from |:argd| is that [file] can be completed.
+
+						    *:Argm*
+:Argm [file] {ind}
+    Move [file] to {ind} in |arglist|.  If [file] is not given then the
+    current active argument is used (as highlighted by |:args| or |:Args|, see
+    |argidx()|).
 
 
 There is one public function:
